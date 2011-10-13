@@ -42,7 +42,7 @@
 			this.graphics.drawRect(0, 0, 100, 100);
 			this.graphics.endFill();
 			
-			stage.addEventListener(MouseEvent.CLICK, function(e:MouseEvent):void{
+			stage.addEventListener(MouseEvent.MOUSE_UP, function(e:MouseEvent):void{
 				postReq.SelectFile();
 			});
 
