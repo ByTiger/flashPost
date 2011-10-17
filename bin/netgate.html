@@ -193,6 +193,13 @@
   {
     console.log("(*) " + str);
   };
+  window.netGateFileNotSelected = function(id)
+  {
+    jQuery("#report").append(jQuery("<div>").html("<span>id=" + id + " &gt;</span> <b>netGateFileNotSelected</b>"));
+    jQuery("#report").attr({ scrollTop: jQuery("#report").attr("scrollHeight") });
+
+    console.log("id:",id," netGateFileNotSelected");
+  };
 
 
 

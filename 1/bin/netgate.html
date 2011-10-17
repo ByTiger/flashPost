@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>post test</title>
+</head>
+<script>
+
+  // receive the SWF object's tag on page
+  function GetSWF(strName)
+  {
+    //return document.getElementById("qq1");
+    if (window.document[strName] != null)
+    {
+      if (window.document[strName].length == null)
+        return window.document[strName];
+      else
+        return window.document[strName][1];
+    }
+    else
+    {
+      if (document[strName].length == null)
+        return document[strName];
+      else
+        return document[strName][1];
+    }
+  }
+
+  // send simple post or get query to server
+  function simple_request()
+  {
+    // get data from page
+    var url = document.getElementById('url').value;
+    var method = document.getElementById('method').value;
+    var postData = document.getElementById('postData').value;
+    if(postData.length <= 0) postData = null;
+    var headerData = document.getElementById('headerData').value;
+    if(headerData.length <= 0) headerData = null;
+    var fileField = document.getElementById('fileField').value;
+    if(fileField.length <= 0) fileField = null;
+
+
+    // call Flash function to send request
+    console.log("simple_request", method, url, postData, headerData, fileField);
+    GetSWF("netgate").netGateSendRequest(method, url, postData, headerData, fileField);
+  }
+
+  // query complete successfully
+  window.netGateSuccess = function(id, errorCode, data)
+  {
+    var obj;
+    try
+    {
+      obj = JSON.parse(data);
+    }
+    catch(e) {}
+    console.log("id:",id," netGateSuccess", data, obj);
+  };
+  // query complete with error
+  window.netGateError = function(id, errorCode)
+  {
+    console.log("id:",id," netGateError", errorCode);
+  };
+  // user click on cancel button
+  window.netGateUserCancel = function(id)
+  {
+    console.log("id:",id," netGateUserCancel");
+  };
+  // user select file for send
+  window.netGateUserSelectFile = function(id, fileName,fileSize)
+  {
+    console.log("id:",id," netGateUserSelectFile", fileName, fileSize);
+    simple_request();
+  };
+  // start file transfer
+  window.netGateStartFilePost = function(id, fileName)
+  {
+    console.log("id:",id," netGateStartFilePost", fileName);
+  };
+  // transfer progress
+  window.netGateProgress = function(id, bytesLoaded, bytesTotal)
+  {
+    console.log("id:",id," netGateProgress", bytesLoaded, bytesTotal);
+  };
+  window.netGateFileNotSelected = function(id)
+  {
+    console.log("id:",id," netGateFileNotSelected");
+  };
+
+</script>
+<body>
+  <p>URL : <input type="text" id="url" value="https://api.soundcloud.com/tracks"/></p>
+  <p>Method :
+    <select id="method">
+      <option value="get">get</option>
+      <option value="post">post</option>
+      <option value="file" selected>post_file</option>
+    </select>
+  </p>
+  <p>post data</p>
+  <textarea id="postData">track[title]=Quick_Fox_Jump_Over_the&track[sharing]=public&oauth_token=1-3168-7336574-22fb8b7d7f4373efa</textarea>
+  <p>header data</p>
+  <textarea id="headerData"></textarea>
+  <p>File field name : <input type="text" id="fileField" value="track[asset_data]"/></p>
+  <p>
+    <input type="button" value="do request" onclick="simple_request()"/>
+  </p>
+  
+  <div style="position:relative">
+    <input type="button" value="send file" style="position: absolute;"/>
+      <div style="position:absolute;opacity: 0">
+        <object style="width: 77px; height: 22px;" id="netgate">
+          <param name="movie" value="netgate.swf?id=100">
+          <param name="allowFullScreen" value="true">
+          <param name="allowScriptAccess" value="always">
+          <param name="src" value="netgate.swf">
+          <param name="wmode" value="opaque">
+          <embed width="77px" height="22px" src="netgate.swf?id=100" name="netgate" type="application/x-shockwave-flash" allowfullscreen="true" allowScriptAccess="always" wmode="opaque">
+        </object>
+      </div>
+    </input>
+  </div>
+</body>
+</html>
